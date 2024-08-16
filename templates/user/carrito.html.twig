@@ -1,0 +1,82 @@
+<link rel="stylesheet" href="{{ asset('styles/client/carrito.css') }}">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel">Carrito de Compras <i class="fa-solid fa-cart-shopping" style="color: #ffffff;"></i></h5>
+        <button type="button" class="btn-close text-reset btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="carrito-content">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Cargando...</p>
+        </div>
+    </div>
+    <div class="var-price">
+        <h5 class="text-center">Total: <span id="total"></span></h5>
+        <div class="content-btn">
+            <button class="btn btn-success btn-st-p">Pedir</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    carrito();
+});
+
+function carrito() {
+    var total = 0;
+    $.ajax({
+        url: "{{ path('app_carrito') }}",
+        type: "GET",
+        success: function(data) {
+            console.log(data);
+            // Asegúrate de limpiar el contenido anterior si es necesario
+            $('#carrito-content').empty();
+
+            // Itera sobre los elementos del carrito
+            data.forEach(function(pedido) {
+                pedido.menus.forEach(function(item) {
+                    // Genera el HTML dinámicamente para cada elemento del carrito
+                    let elementos = 
+                    '<div class="contentItem">' +
+                    '<p class="itemCarritoNom">' + item.nombre + ' <span>Cant: ' + item.cantidad + 'x' + item.precio + '</span></p>' +
+                    '<button type="button" onclick="eliminar(\'' + pedido.id + '\', \'' + item.id + '\')" class="btn-close btn-close-white" aria-label="Close"></button>' +
+                    '</div>';
+                    total += (item.precio * item.cantidad);
+                    console.log(total);
+                    // Añade el elemento al contenedor
+                    $('#carrito-content').append(elementos);
+                });
+            });
+            $('#total').text('$' + total + ' MXN');
+        },
+        error: function(xhr, status, error) {
+            console.error("Error al obtener el carrito: ", error);
+        }
+    });
+}
+
+function eliminar(cid, id) {
+    $.ajax({
+        url: "{{ path('app_delete', {'cid': 'CID', 'id': 'ID'}) }}"
+            .replace('CID', cid)
+            .replace('ID', id),
+        type: "DELETE",
+        success: function(data) {
+            Swal.fire({
+                title: "Good job!",
+                text: "You clicked the button!",
+                icon: "success"
+            }).then(() => {
+                carrito();
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error("Error al eliminar el item: ", error);
+        }
+    });
+}
+</script>
