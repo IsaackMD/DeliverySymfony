@@ -6,6 +6,12 @@
 
  {% endblock %}
 {% block body %}
+{# <div class="btn-back-content" style="margin: 5px 0; ">
+    <a class="back_btn" href="javascript:history.go(-1);" type="button">
+        <i class="fa-solid fa-chevron-left"></i> Regresar
+    </a>
+</div> #}
+<form method="post">
 <main class="col-12">
         <div class="img-container">
             <img id="imgcomida" src="{{asset('imgs/MenuFotos/' ~ comida.Imagen)}}" alt="imagen de comida">
@@ -15,7 +21,7 @@
                 <h1 id="NomComida">{{comida.NomMenu}}</h1>
             </div>
             <div class="descr-content negocio">
-                Negocio: <p id="Negocio">{{negocio.Negocio}}</p>
+                <span class="span_detNe"> Negocio:</span> <p id="Negocio" style="font-size: x-large;">{{negocio.Negocio}}</p>
             </div>
             <div class="descr-content">
                 <p id="descp">{{comida.Descrip}}</p>
@@ -26,9 +32,14 @@
             <div class="cost-content">
                 <h4 id="cost">${{comida.Precio}}MXN</h4>
             </div>
-            <div class="btn-container"><button id="btn" class="btn-buy">Comprar</button></div>
+            <div>
+                <input id="MenuID" type="hidden" value= "{{ comida.id }}" name="MenuID"/>
+                <input id="cantidad" type="number" value = "1" class="form-control input_number" name="cantidad"/>
+            </div>
+            <div class="btn-container"><button id="btn" class="btn-buy" onclick="agregar()">Comprar</button></div>
         </div>
-    </main>
+</main>
+</form>
    <section class="py-2 bg-light">
             <div class="container px-2 px-lg-4 mt-4">
                 <h2 class="fw-bolder mb-2">Productos Relacionados</h2>
@@ -61,4 +72,35 @@
                 </div>
             </div>
         </section>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var cantidad;
+    var MenuID;
+
+    function agregar() {
+        cantidad = $('#cantidad').val();
+        MenuID = $('#MenuID').val();
+        $.ajax({
+            url: '{{ path("app_add_carrito") }}',
+            method: 'POST',
+            data: {
+                cantidad: cantidad,
+                MenuID: MenuID
+            },
+            success: function(response) {
+                Swal.fire({
+                    title: "Agregado!",
+                    text: "Su producto se agregó exitosamente!",
+                    icon: "success"
+                }).then(() => {
+                    location.reload();
+                });
+            },
+            error: function(xhr, status, error) {
+                alert('Error: ' + xhr.responseJSON.error);
+            }
+        });
+    }
+</script>
 {% endblock %}

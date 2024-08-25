@@ -68,16 +68,17 @@
             </div>
     </form>
     <div class="main-content">
-        
         <div class="afiliados-container">
             <h2>Negocios</h2>
             {% for Negocio in Negocios%}
                 <div class="afiliados-content">
-                    <div class="img-content"><img src="{{asset('imgs/NegocioFotos/' ~ Negocio.imagen )}}" alt="imagen afiliados"></div>
-                    <div class="text-content">
-                        <h3>{{Negocio.Negocio}}</h3>
-                        <p>{{Negocio.descripcion}}</p>
-                    </div>
+                    <a class="Negocio-content" href="{{path('app_Negocio', {'id' : Negocio.id})}}">
+                        <div class="img-content"><img src="{{asset('imgs/NegocioFotos/' ~ Negocio.imagen )}}" alt="imagen afiliados"></div>
+                        <div class="text-content">
+                                <h3>{{Negocio.Negocio}}</h3>
+                                <p>{{Negocio.descripcion}}</p>
+                        </div>
+                    </a>
                 </div>
             {% endfor %}
         </div>

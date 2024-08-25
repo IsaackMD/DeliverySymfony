@@ -212,3 +212,11 @@ i{
     width: 100%;
     border-radius: 15px;
 }
+.back_btn{
+    background: red;
+    padding: 5px 15px;
+    margin: 5px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+}

@@ -40,4 +40,15 @@ class NegocioRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+//    public function findCatComida($negocioID): ?Negocio
+//    {
+//        return $this->createQueryBuilder('n')
+//        ->innerJoin('n.CatComida', 'c')
+//        ->addSelect('c')
+//        ->andWhere('n.id = :val')
+//         ->setParameter('val', $negocioID)
+//         ->getQuery()
+//         ->getOneOrNullResult()
+//        ;
+//    }
 }

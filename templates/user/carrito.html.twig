@@ -14,15 +14,16 @@
     </div>
     <div class="var-price">
         <h5 class="text-center">Total: <span id="total"></span></h5>
-        <div class="content-btn">
-            <button class="btn btn-success btn-st-p">Pedir</button>
-        </div>
+            <div class="content-btn">
+                <button id="btnCompra" class="btn btn-success btn-st-p" onclick="detalleCompra()">Pedir</button>
+            </div>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
+    // Carga el contenido del carrito cuando el documento esté listo
     carrito();
 });
 
@@ -32,26 +33,29 @@ function carrito() {
         url: "{{ path('app_carrito') }}",
         type: "GET",
         success: function(data) {
-            console.log(data);
-            // Asegúrate de limpiar el contenido anterior si es necesario
             $('#carrito-content').empty();
-
+            if (data == null || data.length === 0) {
+                $('#carrito-content').html('<p>No hay productos en el carrito.</p>');
+                $('#btnCompra').prop('disabled', true);
+                return;
+            }
             // Itera sobre los elementos del carrito
             data.forEach(function(pedido) {
                 pedido.menus.forEach(function(item) {
                     // Genera el HTML dinámicamente para cada elemento del carrito
                     let elementos = 
                     '<div class="contentItem">' +
-                    '<p class="itemCarritoNom">' + item.nombre + ' <span>Cant: ' + item.cantidad + 'x' + item.precio + '</span></p>' +
+                    '<p class="itemCarritoNom">' + item.nombre + ' <span>Cant: ' + item.cantidad + ' x $' + item.precio + ' MXN</span></p>' +
                     '<button type="button" onclick="eliminar(\'' + pedido.id + '\', \'' + item.id + '\')" class="btn-close btn-close-white" aria-label="Close"></button>' +
                     '</div>';
-                    total += (item.precio * item.cantidad);
-                    console.log(total);
                     // Añade el elemento al contenedor
                     $('#carrito-content').append(elementos);
+                    
                 });
             });
+            total = data[0]['total'];
             $('#total').text('$' + total + ' MXN');
+
         },
         error: function(xhr, status, error) {
             console.error("Error al obtener el carrito: ", error);
@@ -67,10 +71,11 @@ function eliminar(cid, id) {
         type: "DELETE",
         success: function(data) {
             Swal.fire({
-                title: "Good job!",
-                text: "You clicked the button!",
+                title: "Eliminado!",
+                text: "El producto fue eliminado del carrito!",
                 icon: "success"
             }).then(() => {
+                // Recargar el contenido del carrito
                 carrito();
             });
         },
@@ -79,4 +84,10 @@ function eliminar(cid, id) {
         }
     });
 }
+
+function detalleCompra() {
+    window.location.href = "{{ path('app_detalle_compra') }}";
+}
+
 </script>
+
