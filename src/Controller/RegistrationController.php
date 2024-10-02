@@ -70,7 +70,7 @@ class RegistrationController extends AbstractController
                     return $this->redirectToRoute('app_user');
                 } catch (\Exception $e) {
                     // Manejar errores específicos
-                    $error = 'Hubo un error al procesar tu registro. Por favor, intenta de nuevo.';
+                    $error = $e->getMessage() . 'Hubo un error al procesar tu registro. Por favor, intenta de nuevo.';
                     return $this->render('registration/register.html.twig', [
                         'registrationForm' => $form,
                         'error' => $error

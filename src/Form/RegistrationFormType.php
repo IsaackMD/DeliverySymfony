@@ -6,7 +6,7 @@ use App\Entity\User;
 use DateTime;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -125,7 +125,7 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Ingrese Su Telefón'
                 ]
             ])
-            ->add('Fecha_Na', DateTimeType::class,[
+            ->add('Fecha_Na', DateType::class,[
                 'label' => 'Fecha de Nacimiento',
                 'row_attr' => [
                     'class' => 'inputs'
