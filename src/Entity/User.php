@@ -43,7 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Pedido>
      */
-    #[ORM\ManyToMany(targetEntity: Pedido::class, mappedBy: 'Usuario')]
+    #[ORM\OneToMany(targetEntity: Pedido::class, mappedBy: 'Usuario')]
     private Collection $pedidos;
 
     #[ORM\Column]

@@ -116,7 +116,7 @@
                             text: 'Tu pedido ha sido procesado con éxito',
                             icon: 'success',
                         }).then(() => {
-                            window.location.href = "{{ path('app_index') }}";
+                            window.location.href = "{{ path('app_pedido') }}";
                         });
                     },
                     error: function(xhr, status, error) {

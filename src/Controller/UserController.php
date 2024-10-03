@@ -213,15 +213,19 @@ class UserController extends AbstractController
     #[Route('/Pedidos', name: 'app_pedido')]
     public function pedidos(): Response {
         $user = $this->getUser();
-        // if ($user === null) {
-        //     // Manejar el caso donde el usuario no está autenticado
-        //     return $this->redirectToRoute('app_login');
-        // }
+        if ($user === null) {
+            return $this->redirectToRoute('app_login');
+        }
         
-        $pedidos = $this->entityManager->getRepository(Pedido::class)->findOneBy(['Usuario' => $user]);
-        dd($pedidos); // Aquí podrías verificar si $pedidos es un array y no null.
-        die;
+        $pedidos = $this->entityManager->getRepository(Pedido::class)->findById($user, 2);
+        // // Verificar si $pedidos es un array y no null
+        // if ($pedidos === null) {
+        //     $this->addFlash('error', 'No se encontraron pedidos.');
+        //     return $this->redirectToRoute('app_home'); // Redirige a una página de inicio o error
+        // }
+    
         return $this->render('user/pedidos.html.twig', [
+            'pedidos' => $pedidos,
         ]);
     }
     

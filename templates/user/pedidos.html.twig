@@ -1,40 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register De Residente{% endblock %}
-
-{% block stylesheets %}
-<link rel="stylesheet" href="{{ asset('styles/Pags_Principal.css') }}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-{% endblock %}
+{% block title %}Mis pedidos{% endblock %}
 
 {% block body %}
 <div class="container">
     <div class="row">
         <div class="col-12">
             <h1>Mis pedidos</h1>
-            <div>
-                <table class="table">
-                    <thead>
-                        <tr>
+            <table class="table">
+                <thead>
+                    <tr>
                         <th scope="col">PedidoID</th>
-                        <th scope="col">Pedido</th>
+                        <th scope="col">Menu</th>
                         <th scope="col">Cantidad</th>
                         <th scope="col">Total</th>
                         <th scope="col">Estatus</th>
                         <th scope="col">Fecha Pedido</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <th scope="row">3</th>
-                        <td colspan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                        </tr>
-                    </tbody>
-                    </table>
-            </div>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                        {% for pedidoMenu in pedido.getPedidoMenus() %}
+                            <tr>
+                                <th scope="row">{{ pedidoMenu.getId() }}</th>
+                                <td>{{ pedidoMenu.getMenu().getNomMenu() }}</td>
+                                <td>{{ pedidoMenu.getCantidad() }}</td>
+                                <td style="color: green;">${{ pedido.getPrecio() }}MXN</td>
+                                <td>{{ pedido.getEstatus() }}</td>
+                                <td>{{ pedido.getFechaPedido()|date('Y-m-d') }}</td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 {% endblock %}
-

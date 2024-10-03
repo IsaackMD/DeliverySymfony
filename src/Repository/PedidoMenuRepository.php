@@ -19,17 +19,17 @@ class PedidoMenuRepository extends ServiceEntityRepository
 //    /**
 //     * @return PedidoMenu[] Returns an array of PedidoMenu objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('p.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function findPedidos($user): array
+   {
+       return $this->createQueryBuilder('p')
+           ->andWhere('p.Usuario = :user')
+           ->setParameter('user', $user)
+           ->orderBy('p.id', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?PedidoMenu
 //    {

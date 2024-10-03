@@ -22,30 +22,29 @@ class PedidoRepository extends ServiceEntityRepository
 //    /**
 //     * @return Pedido[] Returns an array of Pedido objects
 //     */
-   public function findById(User $value,$opc): array
-   {
+    public function findById(User $value, int $opc): array
+    {
         $query = $this->createQueryBuilder('p')
-        ->leftjoin('p.pedidoMenus','pd')
-        ->leftJoin('pd.Menu','m')
-        ->andWhere('p.id = pd.Pedido')
-        ->andWhere(':usuario MEMBER OF p.Usuario')
-        ->setParameter('usuario', $value);
-        if($opc == 1){
-            $query
-            ->andWhere('p.Estatus = :estatus')
-            ->setParameter('estatus', 'Pendiente')
-            ;
-        }elseif($opc == 2){
-            $query
-            ->andWhere('p.Estatus = :estatus')
-            ->setParameter('estatus', 'Entregado')
-            ;
+            ->leftJoin('p.pedidoMenus', 'pd')
+            ->leftJoin('pd.Menu', 'm')
+            ->andWhere('p.Usuario = :usuario') // Cambiado a una comparación directa
+            ->setParameter('usuario', $value);
+
+        if ($opc === 1) {
+            $query->andWhere('p.Estatus = :estatus')
+                ->setParameter('estatus', 'Pendiente');
+        } elseif ($opc === 2) {
+            $query->andWhere('p.Estatus = :estatus')
+                ->setParameter('estatus', 'Confirmado');
         }
+
         return $query
-        ->orderBy('p.id', 'ASC')
-        ->getQuery()
-        ->getResult();
-   }
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
 //    public function findOneBySomeField($value): ?Pedido
 //    {
